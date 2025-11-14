@@ -62,6 +62,7 @@ export default function App() {
     }
       setPlayerWon(false)
       setMessage("")
+      setIsRunning(false)
   }, [isRunning])
 
   {/* FUNCTIONS */}
@@ -94,6 +95,10 @@ export default function App() {
     }));
   }
 
+  function handleRestart() {
+    setIsRunning(prev => !prev)
+  }
+
   // BOX RENDER
 
   const boxElements = boxes.map((box, index) => 
@@ -104,17 +109,21 @@ export default function App() {
     <div className="main-container">
       <p className="title">Tic Tac Toe</p>
 
+      <p className="player-turn">
+        {gameOver ? "" : playerOneMove ? "Player One's Turn (X)" : "Player Two's Turn (O)"}
+      </p>
+
       <div className="container">
         {boxElements}
       </div>
 
-      {gameOver && 
+      {gameOver &&
         <>
-          <p>The game is over!</p>
-          <button onClick={() => setIsRunning(false)}>Start New Game</button>
+          <p className="game-over-message">The game is over!</p>
+          <p className="game-over-message">{message}</p>
+          <button className="restart-button" onClick={handleRestart}>Restart Game</button>
         </>
       }
-      {gameOver && message}
 
     </div>
   );
