@@ -110,7 +110,7 @@ export default function App() {
       <p className="title">Tic Tac Toe</p>
 
       <p className="player-turn">
-        {gameOver ? "" : playerOneMove ? "Player One's Turn (X)" : "Player Two's Turn (O)"}
+        {gameOver ? "" : playerOneMove ? "Player (X) Turn" : "Player (O) Turn"}
       </p>
 
       <div className="container">
