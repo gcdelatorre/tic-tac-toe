@@ -6,7 +6,7 @@ This project also served as a way to **practice design patterns and problem-solv
 
 ---
 
-## 🕹️ Features
+## 🕹️ Features 
 
 - Two-player local gameplay (**Player X** vs **Player O**)  
 - Detects **wins**, **draws**, and **invalid moves**  
@@ -20,6 +20,6 @@ This project also served as a way to **practice design patterns and problem-solv
 
 - React **state and effect management**  
 - **Component-based architecture**  
-- Implementing **game logic patterns** (turn-taking, win detection, state updates)  
+- Implementing **logic patterns**
 - Planning steps to **solve problems algorithmically**  
 - Preparing for **real-world projects** by applying patterns even in small projects
