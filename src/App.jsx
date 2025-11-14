@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useFormState } from "react-dom";
 
 export default function App() {
   const [boxes, setBoxes] = useState(() => generateBoxes());
@@ -9,6 +10,8 @@ export default function App() {
   const [playerOneMove, setPlayerOneMove] = useState(true)
   const [playerTwoMove, setPlayerTwoMove] = useState(false)
   const [gameOver, setGameOver] = useState(false)
+  const [playerWon, setPlayerWon] = useState(false)
+  const [message, setMessage] = useState("")
 
   function generateBoxes() {
     return Array.from({ length: 9 }, (_, i) => ({
@@ -29,14 +32,22 @@ export default function App() {
     [3, 5, 7]  // diagonal top-right → bottom-left
   ];
 
-  const playerOneWon = winningCombos.every(combo => playerMoves.playerOne.includes(combo));
-  const playerTwoWon = winningCombos.every(combo => playerMoves.playerTwo.includes(combo));
+  useEffect(() => {
 
-  if (playerOneWon || playerTwoWon) {
-    setGameOver(true);
-  }
+      const playerOneWon = winningCombos.some(combo =>
+        combo.every(num => playerMoves.playerOne.includes(num))
+      );
+      const playerTwoWon = winningCombos.some(combo =>
+        combo.every(num => playerMoves.playerTwo.includes(num))
+      );
 
-  console.log(playerMoves)
+      playerOneWon ? setMessage("Player One Wins") : setMessage ("Player Two Wins")
+
+      if (playerOneWon || playerTwoWon) {
+        setPlayerWon(true)
+      }
+
+    }, [playerMoves]) 
 
   useEffect(() => {
     if (gameOver) {
@@ -44,7 +55,13 @@ export default function App() {
       setPlayerOneMove(true)
       setPlayerTwoMove(false)
       setGameOver(false)
+      setPlayerMoves({
+        playerOne: [],
+        playerTwo: []
+      })
     }
+      setPlayerWon(false)
+      setMessage("")
   }, [gameOver])
 
 
@@ -72,7 +89,7 @@ export default function App() {
     <button className="box" 
             key={index}
             onClick={() => toggleBox(box.id)}
-            disabled={box.active === true}>
+            disabled={box.active === true || playerWon}>
           {box.text}
     </button>
   )
@@ -86,12 +103,13 @@ export default function App() {
       </div>
 
 
-      {gameOver && 
+      {playerWon && 
         <>
           <p>The game is over!</p>
           <button onClick={() => setGameOver(true)}>Start New Game</button>
         </>
       }
+      {playerWon && message}
 
     </div>
   );
