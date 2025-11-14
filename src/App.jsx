@@ -15,9 +15,10 @@ export default function App() {
   const [gameOver, setGameOver] = useState(false)
   const [playerWon, setPlayerWon] = useState(false)
   const [message, setMessage] = useState("")
-
+  const [isRunning, setIsRunning] = useState(false)
 
   {/* CONSTANT DATAS */}
+
   const winningCombos = [
     [1, 2, 3], // top row
     [4, 5, 6], // middle row
@@ -28,8 +29,8 @@ export default function App() {
     [1, 5, 9], // diagonal top-left → bottom-right
     [3, 5, 7]  // diagonal top-right → bottom-left
   ];
-  
 
+  
   {/* USE EFFECTS */}
 
   useEffect(() => {
@@ -39,16 +40,17 @@ export default function App() {
       const playerTwoWon = winningCombos.some(combo =>
         combo.every(num => playerMoves.playerTwo.includes(num))
       );
+      const draw = boxes.every(box => box.active === true);
 
-      playerOneWon ? setMessage("Player One Wins") : setMessage ("Player Two Wins")
+      playerOneWon ? setMessage("Player One Wins") : draw ? setMessage("It's a Draw") : playerTwoWon ? setMessage("Player Two Wins") : setMessage("")
 
-      if (playerOneWon || playerTwoWon) {
-        setPlayerWon(true)
+      if (playerOneWon || playerTwoWon || draw) {
+        setGameOver(true)
       }
     }, [playerMoves]) 
 
   useEffect(() => {
-    if (gameOver) {
+    if (isRunning) {
       setBoxes(generateBoxes())
       setPlayerOneMove(true)
       setPlayerTwoMove(false)
@@ -60,8 +62,7 @@ export default function App() {
     }
       setPlayerWon(false)
       setMessage("")
-  }, [gameOver])
-
+  }, [isRunning])
 
   {/* FUNCTIONS */}
 
@@ -93,28 +94,27 @@ export default function App() {
     }));
   }
 
-
   // BOX RENDER
 
   const boxElements = boxes.map((box, index) => 
-    <Box key={index} box={box} toggleBox={() => toggleBox(box.id)} playerWon={playerWon} />
+    <Box key={index} box={box} toggleBox={() => toggleBox(box.id)} playerWon={playerWon} gameOver={gameOver}/>
   )
 
   return (
-    <div>
-      <p>Welcome to the Tic Tac Toe game!</p>
+    <div className="main-container">
+      <p className="title">Tic Tac Toe</p>
 
       <div className="container">
         {boxElements}
       </div>
 
-      {playerWon && 
+      {gameOver && 
         <>
           <p>The game is over!</p>
-          <button onClick={() => setGameOver(true)}>Start New Game</button>
+          <button onClick={() => setIsRunning(false)}>Start New Game</button>
         </>
       }
-      {playerWon && message}
+      {gameOver && message}
 
     </div>
   );
