@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
+import Box from "./components/Box";
 
 export default function App() {
+
+  {/* STATES */}
+
   const [boxes, setBoxes] = useState(() => generateBoxes());
   const [playerMoves, setPlayerMoves] = useState({
     playerOne: [],
@@ -12,14 +16,8 @@ export default function App() {
   const [playerWon, setPlayerWon] = useState(false)
   const [message, setMessage] = useState("")
 
-  function generateBoxes() {
-    return Array.from({ length: 9 }, (_, i) => ({
-      text: null,
-      active: false,
-      id: i + 1
-    }));
-  }
 
+  {/* CONSTANT DATAS */}
   const winningCombos = [
     [1, 2, 3], // top row
     [4, 5, 6], // middle row
@@ -30,9 +28,11 @@ export default function App() {
     [1, 5, 9], // diagonal top-left → bottom-right
     [3, 5, 7]  // diagonal top-right → bottom-left
   ];
+  
+
+  {/* USE EFFECTS */}
 
   useEffect(() => {
-
       const playerOneWon = winningCombos.some(combo =>
         combo.every(num => playerMoves.playerOne.includes(num))
       );
@@ -45,7 +45,6 @@ export default function App() {
       if (playerOneWon || playerTwoWon) {
         setPlayerWon(true)
       }
-
     }, [playerMoves]) 
 
   useEffect(() => {
@@ -63,6 +62,8 @@ export default function App() {
       setMessage("")
   }, [gameOver])
 
+
+  {/* FUNCTIONS */}
 
   function toggleBox (id) {
 
@@ -84,13 +85,19 @@ export default function App() {
     )
   }
 
+  function generateBoxes() {
+    return Array.from({ length: 9 }, (_, i) => ({
+      text: null,
+      active: false,
+      id: i + 1
+    }));
+  }
+
+
+  // BOX RENDER
+
   const boxElements = boxes.map((box, index) => 
-    <button className="box" 
-            key={index}
-            onClick={() => toggleBox(box.id)}
-            disabled={box.active === true || playerWon}>
-          {box.text}
-    </button>
+    <Box key={index} box={box} toggleBox={() => toggleBox(box.id)} playerWon={playerWon} />
   )
 
   return (
@@ -100,7 +107,6 @@ export default function App() {
       <div className="container">
         {boxElements}
       </div>
-
 
       {playerWon && 
         <>
