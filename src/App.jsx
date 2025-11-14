@@ -18,6 +18,14 @@ export default function App() {
         <button className="box"></button>
         <button className="box"></button>
       </div>
+
+      <h1></h1>
+      <h1></h1>
+      <h1></h1>
+      <h1></h1>
+      <h1></h1>
+      <h1></h1>
+      <h1></h1>
     </div>
   );
 }
