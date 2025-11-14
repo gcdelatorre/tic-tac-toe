@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useFormState } from "react-dom";
 
 export default function App() {
   const [boxes, setBoxes] = useState(() => generateBoxes());
